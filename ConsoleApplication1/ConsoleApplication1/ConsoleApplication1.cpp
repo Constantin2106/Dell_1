@@ -2,10 +2,29 @@
 //
 
 #include <iostream>
+#include <list>
+
+#include "Caller.h"
 
 int main()
 {
     std::cout << "Hello World!\n";
+
+    Caller::Executor_1 ex_1;
+    Caller::Executor_2 ex_2;
+    ex_1.Call();
+    ex_2.Call();
+    ex_1.Execute();
+    ex_2.Execute();
+
+    /*std::list<Caller::Caller*> executors;
+    
+    executors.push_back(ex_1);
+    executors.push_back(ex_2);
+    
+    for(auto& ex : executors)
+        ex*/
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
