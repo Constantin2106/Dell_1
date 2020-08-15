@@ -7,16 +7,51 @@
 #include "Caller.h"
 #include "Function.h"
 
+auto funFree(int i)
+{
+    std::cout << "Call free function\n";
+    return i + 1;
+}
+class Incrementor
+{
+    int m_Val{};
+
+public:
+    Incrementor() = default;
+    auto Calc(int inc)
+    {
+        std::cout << "Call member function\n";
+            
+        m_Val += inc;
+        return m_Val;
+    }
+};
+
 int main()
 {
     std::cout << "Hello World!\n";
 
-    Caller::Executor_1 ex_1;
+    typedef bc::function<int(int)> func_ptr;
+    std::list<func_ptr> funcs;
+
+    Incrementor inc;
+
+    funcs.push_back(BC_BIND(&funFree));
+    funcs.push_back(BC_BIND(&Incrementor::Calc, &inc));
+
+    int i = 1, c = 0;
+    for (auto f : funcs)
+    {
+        c += f ? f(i) : 0;
+        std::cout << "c = " << c << std::endl;
+    }
+
+    /*Caller::Executor_1 ex_1;
     Caller::Executor_2 ex_2;
     ex_1.Call();
     ex_2.Call();
     ex_1.Execute();
-    ex_2.Execute();
+    ex_2.Execute();*/
 
     /*std::list<Caller::Caller*> executors;
     
