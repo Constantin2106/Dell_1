@@ -7,23 +7,34 @@
 #include "Caller.h"
 #include "Function.h"
 
-auto funFree(int i)
+auto Inc(int i)
 {
-    std::cout << "Call free function\n";
+    std::cout << "Call free function Inc\n";
     return i + 1;
 }
-class Incrementor
+auto Add(int a, int b)
+{
+    std::cout << "Call free function Add\n";
+    return a + b;
+}
+
+class Class
 {
     int m_Val{};
 
 public:
-    Incrementor() = default;
-    auto Calc(int inc)
+    Class() = default;
+    auto Inc(int i)
     {
-        std::cout << "Call member function\n";
+        std::cout << "Call member function Inc\n";
             
-        m_Val += inc;
+        m_Val = ++i;
         return m_Val;
+    }
+    auto Add(int a, int b)
+    {
+        std::cout << "Call member function Add\n";
+        return a + b;
     }
 };
 
@@ -31,18 +42,30 @@ int main()
 {
     std::cout << "Hello World!\n";
 
-    typedef bc::function<int(int)> func_ptr;
-    std::list<func_ptr> funcs;
+    using pIncFun = bc::function<int(int)>;
+    std::list<pIncFun> Incs;
 
-    Incrementor inc;
+    using pAddFun = bc::function<int(int, int)>;
+    std::list<pAddFun> Adds;
 
-    funcs.push_back(BC_BIND(&funFree));
-    funcs.push_back(BC_BIND(&Incrementor::Calc, &inc));
+    Class cl;
+
+    Incs.push_back(BC_BIND(&Inc));
+    Incs.push_back(BC_BIND(&Class::Inc, &cl));
+    
+    Adds.push_back(BC_BIND(&Class::Add, &cl));
+    Adds.push_back(BC_BIND(&Add));
 
     int i = 1, c = 0;
-    for (auto f : funcs)
+    for (auto f : Incs)
     {
         c += f ? f(i) : 0;
+        std::cout << "c = " << c << std::endl;
+    }
+    c = 0;
+    for (auto f : Adds)
+    {
+        c += f ? f(i, 5) : 0;
         std::cout << "c = " << c << std::endl;
     }
 
