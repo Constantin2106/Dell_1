@@ -42,19 +42,21 @@ int main()
 {
     std::cout << "Hello World!\n";
 
-    using pIncFun = bc::function<int(int)>;
+    using namespace Utils;
+
+    using pIncFun = Delegate<int(int)>;
     std::list<pIncFun> Incs;
 
-    using pAddFun = bc::function<int(int, int)>;
+    using pAddFun = Delegate<int(int, int)>;
     std::list<pAddFun> Adds;
 
-    Class cl;
+    Class* cl = new Class();
 
-    Incs.push_back(BC_BIND(&Inc));
-    Incs.push_back(BC_BIND(&Class::Inc, &cl));
+    Incs.push_back(DG_BIND(&Inc));
+    Incs.push_back(DG_BIND(&Class::Inc, cl));
     
-    Adds.push_back(BC_BIND(&Class::Add, &cl));
-    Adds.push_back(BC_BIND(&Add));
+    Adds.push_back(DG_BIND(&Class::Add, cl));
+    Adds.push_back(DG_BIND(&Add));
 
     int i = 1, c = 0;
     for (auto f : Incs)
