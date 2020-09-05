@@ -7,12 +7,12 @@
 #include "Caller.h"
 #include "Function.h"
 
-auto Inc(int i)
+int Inc(int i)
 {
     std::cout << "Call free function Inc\n";
     return i + 1;
 }
-auto Add(int a, int b)
+int Add(int a, int b)
 {
     std::cout << "Call free function Add\n";
     return a + b;
@@ -42,6 +42,8 @@ int main()
 {
     std::cout << "Hello World!\n";
 
+    std::cout << DG_SUBST("asdf\n");
+
     using namespace Utils;
 
     using pIncFun = Delegate<int(int)>;
@@ -70,6 +72,15 @@ int main()
         c += f ? f(i, 5) : 0;
         std::cout << "c = " << c << std::endl;
     }
+
+
+    Class* cls = new Class();
+
+    FunCaller::Caller<int(int)> fIncCall(&Inc);
+    FunCaller::Caller<int(int, int)> fAddCall(&Class::Add, cls);
+    std::cout << fIncCall(1) << std::endl;
+    std::cout << fAddCall(5, 3) << std::endl;
+
 
     /*Caller::Executor_1 ex_1;
     Caller::Executor_2 ex_2;

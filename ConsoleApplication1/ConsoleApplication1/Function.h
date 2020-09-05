@@ -18,6 +18,54 @@
 
 #define DG_BIND(...)                            DG_BIND_DISAMBIGUATE(DG_HAS_ARGS(__VA_ARGS__), __VA_ARGS__)
 
+namespace FunCaller
+{
+    template<typename Signature>
+    class Caller;
+
+    template<typename R, typename... Args>
+    class Caller<R(Args...)>
+    {
+        using Func = R(*)(Args...);
+        Func mFunc{};
+        const void* mObj{};
+
+    public:
+        Caller(Func f, const void* o = nullptr) : mFunc(f), mObj(o) {}
+        R operator() (Args... args) const
+        {
+            if (mFunc)
+            {
+                /*if(mObj)
+                    return (mObj->*mFunc)(std::forward<Args>(args)...);*/
+                return (*mFunc)(std::forward<Args>(args)...);
+            }
+        }
+    };
+
+    template<typename R, typename C, typename... Args>
+    class Caller<R(C::*)(Args...)>
+    {
+        using Func = R(C::*)(Args...);
+        Func mFunc{};
+        const void* mObj{};
+
+    public:
+        Caller(Func f, const void* o) : mFunc(f), mObj(o) {}
+        R operator() (Args... args) const
+        {
+            if (mFunc)
+            {
+                if (mObj)
+                {
+                    C* instance = const_cast<C*>(static_cast<C const*>(mObj));
+                    return (instance->*mFunc)(std::forward<Args>(args)...);
+                }
+                //return (*mFunc)(std::forward<Args>(args)...);
+            }
+        }
+    };
+}
 namespace Utils
 {
     template <typename Signature>
