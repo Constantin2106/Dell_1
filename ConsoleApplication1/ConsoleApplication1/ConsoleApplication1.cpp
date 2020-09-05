@@ -46,6 +46,12 @@ int main()
 
     using namespace Utils;
 
+    DG_SUBST(DG_HAS_ARGS_IMPL(__VA_ARGS__, 2, 1, ERROR));
+    DG_HAS_ARGS_IMPL(&Inc, 2, 1, ERROR);
+    
+    DG_BIND_DISAMBIGUATE(DG_SUBST(DG_HAS_ARGS_IMPL(&Inc, 2, 1, ERROR)), &Inc);
+    DG_BIND_DISAMBIGUATE(DG_HAS_ARGS(&Inc), &Inc);
+
     using pIncFun = Delegate<int(int)>;
     std::list<pIncFun> Incs;
 
