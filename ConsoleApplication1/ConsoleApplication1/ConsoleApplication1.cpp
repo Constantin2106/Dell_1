@@ -83,8 +83,10 @@ int main()
     Class* cls = new Class();
 
     FunCaller::Caller<decltype(&Inc)> fIncCall(&Inc);
+    FunCaller::Caller<decltype(&Add)> fFreeAddCall(&Add);
     FunCaller::Caller<decltype(&Class::Add)> fAddCall(&Class::Add, cls);
     std::cout << fIncCall(1) << std::endl;
+    std::cout << fFreeAddCall(10, 5) << std::endl;
     std::cout << fAddCall(5, 3) << std::endl;
 
 
