@@ -24,7 +24,7 @@ namespace FunCaller
     class Caller;
 
     template<typename R, typename... Args>
-    class Caller<R(Args...)>
+    class Caller<R(*)(Args...)>
     {
         using Func = R(*)(Args...);
         Func mFunc{};

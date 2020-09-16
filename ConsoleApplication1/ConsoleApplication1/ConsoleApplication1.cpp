@@ -66,7 +66,7 @@ int main()
     Adds.push_back(DG_BIND(&Class::Add, cl));
     Adds.push_back(DG_BIND(&Add));
 
-    int i = 1, c = 0;
+    /*int i = 1, c = 0;
     for (auto f : Incs)
     {
         c += f ? f(i) : 0;
@@ -77,13 +77,13 @@ int main()
     {
         c += f ? f(i, 5) : 0;
         std::cout << "c = " << c << std::endl;
-    }
+    }*/
 
 
     Class* cls = new Class();
 
-    FunCaller::Caller<int(int)> fIncCall(&Inc);
-    FunCaller::Caller<int(int, int)> fAddCall(&Class::Add, cls);
+    FunCaller::Caller<decltype(&Inc)> fIncCall(&Inc);
+    FunCaller::Caller<decltype(&Class::Add)> fAddCall(&Class::Add, cls);
     std::cout << fIncCall(1) << std::endl;
     std::cout << fAddCall(5, 3) << std::endl;
 
