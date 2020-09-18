@@ -36,8 +36,6 @@ namespace FunCaller
         {
             if (mFunc)
             {
-                /*if(mObj)
-                    return (mObj->*mFunc)(std::forward<Args>(args)...);*/
                 return (*mFunc)(std::forward<Args>(args)...);
             }
         }
@@ -54,14 +52,11 @@ namespace FunCaller
         Caller(Func f, const void* o) : mFunc(f), mObj(o) {}
         R operator() (Args... args) const
         {
-            if (mFunc)
+            if (mFunc && mObj)
             {
-                if (mObj)
-                {
-                    C* instance = const_cast<C*>(static_cast<C const*>(mObj));
-                    return (instance->*mFunc)(std::forward<Args>(args)...);
-                }
-                //return (*mFunc)(std::forward<Args>(args)...);
+               
+                C* instance = const_cast<C*>(static_cast<C const*>(mObj));
+               return (instance->*mFunc)(std::forward<Args>(args)...);
             }
         }
     };

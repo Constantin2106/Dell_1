@@ -66,6 +66,9 @@ int main()
     Adds.push_back(DG_BIND(&Class::Add, cl));
     Adds.push_back(DG_BIND(&Add));
 
+    Delegate<int(int)> dlgFreeInc(DG_BIND(&Inc));
+    Delegate<int(int)> dlgMembInc(DG_BIND(&Class::Inc, cl));
+
     /*int i = 1, c = 0;
     for (auto f : Incs)
     {
@@ -88,6 +91,9 @@ int main()
     std::cout << fIncCall(1) << std::endl;
     std::cout << fFreeAddCall(10, 5) << std::endl;
     std::cout << fAddCall(5, 3) << std::endl;
+
+    std::list<decltype(&Inc)> freeList;
+    freeList.push_back(Inc);
 
 
     /*Caller::Executor_1 ex_1;
